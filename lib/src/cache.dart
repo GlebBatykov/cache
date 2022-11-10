@@ -1,14 +1,21 @@
-part of cache;
+library cache;
 
+import 'dart:async';
+
+part 'cached_value.dart';
+
+///
 class Cache {
   final Map<String, CachedValue> _values = {};
 
+  ///
   List<String> get keys => _values.keys.toList();
 
   Timer? _expirationTimer;
 
   bool _isDisposed = false;
 
+  ///
   bool get isDisposed => _isDisposed;
 
   Cache(
@@ -26,14 +33,17 @@ class Cache {
         (key, value) => value.expiration != null && value.isExpire());
   }
 
+  ///
   void set(String key, dynamic value, {Duration? expiration}) {
     _values[key] = (CachedValue(value, expiration, DateTime.now()));
   }
 
+  ///
   void delete(String key) {
     _values.remove(key);
   }
 
+  ///
   void changeExpiration(String key, Duration expiration) {
     var value = _values[key];
 
@@ -42,14 +52,17 @@ class Cache {
     }
   }
 
+  ///
   bool has(String key) {
     return _values.containsKey(key);
   }
 
+  ///
   void clear() {
     _values.clear();
   }
 
+  ///
   void dispose() {
     if (!_isDisposed) {
       _expirationTimer?.cancel();
@@ -62,6 +75,7 @@ class Cache {
     }
   }
 
+  ///
   dynamic get(String key) {
     var value = _values[key];
 
