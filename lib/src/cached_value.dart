@@ -5,9 +5,11 @@ class CachedValue {
 
   Duration? expiration;
 
-  final DateTime cacheDate;
+  final DeleteCallback? onDelete;
 
-  CachedValue(this.value, this.expiration, this.cacheDate);
+  DateTime cacheDate;
+
+  CachedValue(this.value, this.expiration, this.onDelete, this.cacheDate);
 
   bool isExpire() {
     return cacheDate.add(expiration!).isBefore(DateTime.now());

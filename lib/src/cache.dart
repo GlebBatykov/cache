@@ -3,6 +3,9 @@ library cache;
 import 'dart:async';
 
 part 'cached_value.dart';
+part 'expiration_setting.dart';
+
+typedef DeleteCallback<T> = bool Function(T value);
 
 ///
 class Cache {
@@ -29,13 +32,28 @@ class Cache {
   }
 
   void _checkExpiration() {
-    _values.removeWhere(
-        (key, value) => value.expiration != null && value.isExpire());
+    var expired = _values.entries.where((element) =>
+        element.value.expiration != null && element.value.isExpire());
+
+    for (var entry in expired) {
+      var onDelete = entry.value.onDelete;
+
+      if (onDelete != null && onDelete(entry.value.value) ||
+          entry.value.onDelete == null) {
+        _values.remove(entry.key);
+      } else {
+        entry.value.cacheDate = DateTime.now();
+      }
+    }
+
+    // _values.removeWhere(
+    //     (key, value) => value.expiration != null && value.isExpire());
   }
 
   ///
-  void set(String key, dynamic value, {Duration? expiration}) {
-    _values[key] = (CachedValue(value, expiration, DateTime.now()));
+  void set(String key, dynamic value, {ExpirationSetting? expirationSetting}) {
+    _values[key] = (CachedValue(value, expirationSetting?.expiration,
+        expirationSetting?.onDelete, DateTime.now()));
   }
 
   ///

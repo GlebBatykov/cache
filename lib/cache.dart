@@ -1,1 +1,1 @@
-export 'src/cache.dart' show Cache;
+export 'src/cache.dart' show Cache, ExpirationSetting;
