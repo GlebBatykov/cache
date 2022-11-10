@@ -6,7 +6,7 @@ void main() {
     late Cache cache;
 
     setUp(() {
-      cache = Cache();
+      cache = Cache(checkPeriod: Duration(milliseconds: 100));
     });
 
     tearDown(() {
@@ -56,7 +56,7 @@ void main() {
     test('change expiration', () async {
       cache.set('123', 123, expiration: Duration(milliseconds: 100));
 
-      cache.changeExpiration('123', Duration(seconds: 1));
+      cache.changeExpiration('123', Duration(milliseconds: 400));
 
       var list = <int?>[];
 
@@ -64,7 +64,24 @@ void main() {
         Future.delayed(Duration(milliseconds: 125), () {
           list.add(cache['123']);
         }),
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(Duration(milliseconds: 500), () {
+          list.add(cache['123']);
+        })
+      ]);
+
+      expect(list, [123, null]);
+    });
+
+    test('expiration', () async {
+      cache.set('123', 123, expiration: Duration(milliseconds: 300));
+
+      var list = <int?>[];
+
+      await Future.wait([
+        Future.delayed(Duration(milliseconds: 150), () {
+          list.add(cache['123']);
+        }),
+        Future.delayed(Duration(milliseconds: 400), () {
           list.add(cache['123']);
         })
       ]);
