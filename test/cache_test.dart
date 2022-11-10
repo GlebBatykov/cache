@@ -54,7 +54,9 @@ void main() {
     });
 
     test('change expiration', () async {
-      cache.set('123', 123, expiration: Duration(milliseconds: 100));
+      cache.set('123', 123,
+          expirationSetting:
+              ExpirationSetting(expiration: Duration(milliseconds: 100)));
 
       cache.changeExpiration('123', Duration(milliseconds: 400));
 
@@ -73,7 +75,9 @@ void main() {
     });
 
     test('expiration', () async {
-      cache.set('123', 123, expiration: Duration(milliseconds: 300));
+      cache.set('123', 123,
+          expirationSetting:
+              ExpirationSetting(expiration: Duration(milliseconds: 300)));
 
       var list = <int?>[];
 
