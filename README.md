@@ -10,6 +10,7 @@
 - [About Cache](#about-cache)
 - [Set](#set)
 - [Get](#get)
+- [Update](#update)
 - [Delete](#delete)
 - [Has](#has)
 - [Expiration](#expiration)
@@ -61,6 +62,43 @@ Expected output:
 ```dart
 Alex
 Alex
+```
+
+# Update
+
+You can update an existing value and update its lifetime using the `update` method.
+
+Example of updating a value:
+
+```dart
+void main(List<String> args) {
+  var cache = Cache(checkPeriod: const Duration(milliseconds: 250));
+
+  cache.set('name', 'Alex',
+      expirationSetting:
+          ExpirationSetting(expiration: const Duration(seconds: 1)));
+
+  Future.delayed(const Duration(milliseconds: 500), () {
+    cache.update('name', 'Tom');
+  });
+
+  Future.delayed(const Duration(milliseconds: 1300), () {
+    print(cache['name']);
+  });
+
+  Future.delayed(const Duration(milliseconds: 1600), () {
+    print(cache['name']);
+
+    cache.dispose();
+  });
+}
+```
+
+Expected output:
+
+```dart
+Tom
+null
 ```
 
 # Delete
