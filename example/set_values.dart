@@ -1,4 +1,4 @@
-import 'package:cache/cache.dart';
+import 'package:mcache/mcache.dart';
 
 void main(List<String> args) {
   var cache = Cache(deleteOnExpire: false);

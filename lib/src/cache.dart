@@ -1,9 +1,4 @@
-library cache;
-
-import 'dart:async';
-
-part 'cached_value.dart';
-part 'expiration_setting.dart';
+part of mcache;
 
 typedef OnDeleteCallback<T> = bool Function(T value);
 
@@ -55,6 +50,16 @@ class Cache {
   void set(String key, dynamic value, {ExpirationSetting? expirationSetting}) {
     _values[key] = (CachedValue(value, expirationSetting?.expiration,
         expirationSetting?.onDelete, DateTime.now()));
+  }
+
+  /// If cache contains value by [key] updates it.
+  ///
+  /// Updates the lifetime of the value.
+  void update(String key, dynamic value) {
+    if (_values.containsKey(key)) {
+      _values[key]!.value = value;
+      _values[key]!.cacheDate = DateTime.now();
+    }
   }
 
   /// Deletes value by [key].

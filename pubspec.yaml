@@ -1,4 +1,4 @@
-name: cache
+name: mcache
 description: Tools for caching values in memory. Supports setting the expiration of values.
 version: 1.0.0
 homepage: https://github.com/GlebBatykov/cache

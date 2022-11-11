@@ -1,4 +1,4 @@
-part of cache;
+part of mcache;
 
 /// Contains the expiration settings.
 class ExpirationSetting {

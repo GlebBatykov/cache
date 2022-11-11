@@ -1,4 +1,4 @@
-import 'package:cache/cache.dart';
+import 'package:mcache/mcache.dart';
 import 'package:test/test.dart';
 
 void main() {

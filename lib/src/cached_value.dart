@@ -1,7 +1,7 @@
-part of cache;
+part of mcache;
 
 class CachedValue {
-  final dynamic value;
+  dynamic value;
 
   Duration? expiration;
 
