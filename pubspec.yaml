@@ -1,6 +1,6 @@
 name: mcache
 description: Tools for caching values in memory. Supports setting the expiration of values.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/GlebBatykov/cache
 
 environment:
