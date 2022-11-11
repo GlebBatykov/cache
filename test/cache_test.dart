@@ -58,7 +58,8 @@ void main() {
           expirationSetting:
               ExpirationSetting(expiration: Duration(milliseconds: 100)));
 
-      cache.changeExpiration('123', Duration(milliseconds: 400));
+      cache.changeExpiration(
+          '123', ExpirationSetting(expiration: Duration(milliseconds: 400)));
 
       var list = <int?>[];
 
