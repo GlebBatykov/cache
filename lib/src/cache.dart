@@ -5,20 +5,20 @@ import 'dart:async';
 part 'cached_value.dart';
 part 'expiration_setting.dart';
 
-typedef DeleteCallback<T> = bool Function(T value);
+typedef OnDeleteCallback<T> = bool Function(T value);
 
-///
+/// Used for caching values.
 class Cache {
   final Map<String, CachedValue> _values = {};
 
-  ///
+  /// All values keys.
   List<String> get keys => _values.keys.toList();
 
   Timer? _expirationTimer;
 
   bool _isDisposed = false;
 
-  ///
+  /// Displays whether this cache instance is disposed.
   bool get isDisposed => _isDisposed;
 
   Cache(
@@ -32,10 +32,14 @@ class Cache {
   }
 
   void _checkExpiration() {
-    var expired = _values.entries.where((element) =>
-        element.value.expiration != null && element.value.isExpire());
+    var expired = _values.entries
+        .where((element) =>
+            element.value.expiration != null && element.value.isExpire())
+        .toList();
 
-    for (var entry in expired) {
+    for (var i = 0; i < expired.length; i++) {
+      var entry = expired[i];
+
       var onDelete = entry.value.onDelete;
 
       if (onDelete != null && onDelete(entry.value.value) ||
@@ -45,42 +49,41 @@ class Cache {
         entry.value.cacheDate = DateTime.now();
       }
     }
-
-    // _values.removeWhere(
-    //     (key, value) => value.expiration != null && value.isExpire());
   }
 
-  ///
+  /// Sets [value] by [key].
   void set(String key, dynamic value, {ExpirationSetting? expirationSetting}) {
     _values[key] = (CachedValue(value, expirationSetting?.expiration,
         expirationSetting?.onDelete, DateTime.now()));
   }
 
-  ///
+  /// Deletes value by [key].
   void delete(String key) {
     _values.remove(key);
   }
 
-  ///
-  void changeExpiration(String key, Duration expiration) {
+  /// Changes value expiration by [key].
+  void changeExpiration(String key, ExpirationSetting expirationSetting) {
     var value = _values[key];
 
     if (value != null) {
-      value.expiration = expiration;
+      value.expiration = expirationSetting.expiration;
+
+      value.onDelete = expirationSetting.onDelete;
     }
   }
 
-  ///
+  /// Checks is value by [key] has.
   bool has(String key) {
     return _values.containsKey(key);
   }
 
-  ///
+  /// Clears all values.
   void clear() {
     _values.clear();
   }
 
-  ///
+  /// Clears all values and cancel expiration timer.
   void dispose() {
     if (!_isDisposed) {
       _expirationTimer?.cancel();
@@ -93,7 +96,7 @@ class Cache {
     }
   }
 
-  ///
+  /// Gets value by [key].
   dynamic get(String key) {
     var value = _values[key];
 

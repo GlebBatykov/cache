@@ -5,7 +5,7 @@ class CachedValue {
 
   Duration? expiration;
 
-  final DeleteCallback? onDelete;
+  OnDeleteCallback? onDelete;
 
   DateTime cacheDate;
 
